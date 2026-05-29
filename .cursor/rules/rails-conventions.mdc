@@ -1,0 +1,25 @@
+
+---
+description: Rails 8 conventions for the sample todo app
+alwaysApply: true
+---
+
+# Rails 8 Development Conventions
+
+All AI-generated code changes must rigidly adhere to these structural paradigms, architecture patterns, and engineering rules.
+
+## Tooling & Generation
+* **Code Scaffolding:** Use `bin/rails generate` commands to stub out new resources, migrations, controllers, or jobs. Do not hand-write raw boilerplate code from scratch.
+* **Database Target:** Keep the schema explicitly scoped to this standalone todo application. Do not import, reference, or cross-pollinate database models, tables, or schema definitions from other internal or external projects.
+
+## Database & Migrations
+* **Reversibility:** Every single database migration must be strictly reversible. Always write standard structural changes inside a `change` method using Active Record's reversible DSL elements (e.g., `create_table`, `add_column`). Avoid writing manual `up` and `down` split methods unless structurally necessary.
+* **Integrity:** Maintain proper database indexation on foreign keys and use column nullability flags (`null: false`) to safeguard structural data invariants directly at the database level.
+
+## Controller & Action Architecture
+* **Strong Parameters:** Explicitly filter incoming request parameters via dedicated controller private methods using `params.require(:todo).permit(...)`. Never interact directly with raw unvetted parameters.
+* **Frontend Overrides:** Deeply prefer native Hotwire paradigms (Turbo Streams and Turbo Frames) for reactive state updates instead of introducing custom JavaScript files or raw AJAX handlers.
+* **Dual Format Compliance:** Ensure that controllers handling resourceful actions gracefully respond to both rich HTML interfaces and programmatic JSON payloads using the app's established Jbuilder view architecture.
+
+## Model Layer Design
+* **Data Transformations:** Model-level logic (such as string formatting, data concatenations, or attribute calculations like `full_description`) must be cleanly written inside the scoping limits of the model class definition wrapper. Do not leak structural computation definitions into helpers or views.

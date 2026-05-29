@@ -1,0 +1,24 @@
+
+---
+description: Security rules and defensive coding standards for the sample todo app
+alwaysApply: true
+---
+
+# Rails 8 Security & Defensive Coding Rules
+
+All AI-generated code changes, library updates, and database modifications must enforce these absolute security rules to maintain compliance and application safety.
+
+## Credentials & Secrets Management
+* **Zero Log Visibility:** Never write, log, echo, or leak application secrets, API keys, private tokens, or production credentials in code comments, test files, error handlers, or logs. 
+* **Filter Sensitive Parameters:** Ensure any new critical query parameters or form parameters are registered under `config/initializers/filter_parameter_logging.rb`.
+
+## Code Execution & Serialization Safety
+* **Dynamic Evaluation Prohibition:** Never utilize `eval`, `instance_eval`, `class_eval`, or `binding.eval` on untrusted user inputs or dynamic string payloads. Implement explicit hash lookups or object mapping constants instead.
+* **Avoid Unsafe HTML Escaping Bypasses:** Do not invoke `.html_safe` or `raw()` on string variables that incorporate unvalidated parameters, external data sources, or arbitrary input strings. Always leverage standard ERB escaping or explicitly sanitize strings using Rails view helpers.
+
+## Database & Query Security
+* **SQL Injection Prevention:** Always use sanitized Active Record parameterization models (e.g., `where("description = ?", input)` or `where(description: input)`). Never string-interpolate, append, or patch raw parameters directly into database queries or raw SQL fragments.
+
+## Rails Framework Safety & Protections
+* **Maintain Request Validation Invariants:** Do not disable, skip, or modify cross-site request forgery protection. Never write or append `skip_before_action :verify_authenticity_token` into controller configurations unless handling authenticated, token-based webhook formats explicitly configured outside this context.
+* **Mass Assignment & Model Security:** Do not bypass Strong Parameter schemas. Do not write manual attributes or bypass parameters via structural model configuration workarounds. Maintain clear session tracking rules across the user-facing routing layers.
