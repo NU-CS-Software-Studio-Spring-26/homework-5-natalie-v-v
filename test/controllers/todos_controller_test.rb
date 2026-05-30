@@ -45,4 +45,20 @@ class TodosControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to todos_url
   end
+
+  test "should snooze due date by 24 hours via turbo stream" do
+    initial_time = @todo.due_date
+
+    assert_no_changes -> { Todo.count } do
+      patch snooze_todo_url(@todo), as: :turbo_stream
+    end
+
+    assert_response :success
+    assert_equal "text/vnd.turbo-stream.html", response.media_type
+    assert_match /action="replace"/, response.body
+    assert_match /target="todo_#{@todo.id}"/, response.body
+
+    assert_equal initial_time + 24.hours, @todo.reload.due_date
+  end
+
 end
