@@ -64,6 +64,21 @@ class TodosController < ApplicationController
     end
   end
 
+
+  def snooze
+    @todo.snooze!
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "todo_#{@todo.id}",
+          partial: "todos/todo",
+          locals: { todo: @todo }
+        )
+      end
+      format.html { redirect_to todos_path }
+    end
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_todo

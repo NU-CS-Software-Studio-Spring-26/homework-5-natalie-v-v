@@ -1,7 +1,47 @@
-<div id="<%= dom_id todo %>">
-  <p>
-    <strong>Description:</strong>
-    <%= todo.description %>
-  </p>
+<div id="<%= dom_id(todo) %>" class="todo-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+  <div>
+    <strong><%= todo.description %></strong>
+    <% if todo.due_date.present? %>
+      <small>(Due: <%= l(todo.due_date, format: :short) %>)</small>
+    <% end %>
+  </div>
 
+  <%# Clean button_to form targeting our patch endpoint %>
+  <%= button_to toggle_priority_todo_path(todo), method: :patch, data: { turbo_stream: true }, style: "background: none; border: none; cursor: pointer; font-size: 1.2rem;" do %>
+    <% if todo.high_priority? %>
+      <span title="High Priority">🔥</span>
+    <% else %>
+      <span title="Normal Priority" style="opacity: 0.3;">💤</span>
+    <% end %>
+  <% end %>
+
+  <div>
+    <%= link_to "Show", todo %> |
+    <%= link_to "Edit", edit_todo_path(todo) %>
+  </div>
+</div><div id="<%= dom_id(todo) %>" class="todo-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+  <div>
+    <strong><%= todo.description %></strong>
+    <% if todo.due_date.present? %>
+      <small>(Due: <%= l(todo.due_date, format: :short) %>)</small>
+    <% end %>
+  </div>
+  <%# Clean button_to form targeting our patch endpoint %>
+  <%= button_to toggle_priority_todo_path(todo), method: :patch, data: { turbo_stream: true }, style: "background: none; border: none; cursor: pointer; font-size: 1.2rem;" do %>
+    <% if todo.high_priority? %>
+      <span title="High Priority">🔥</span>
+    <% else %>
+      <span title="Normal Priority" style="opacity: 0.3;">💤</span>
+    <% end %>
+  <% end %>
+
+  <% # Quick Snooze Toggle %>
+    <%= button_to snooze_todo_path(todo), method: :patch, data: { turbo_stream: true }, title: "Snooze 24 hours", style: "background: none; border: none; cursor: pointer;" do %>
+      ⏳
+    <% end %>
+
+  <div>
+    <%= link_to "Show", todo %> |
+    <%= link_to "Edit", edit_todo_path(todo) %>
+  </div>
 </div>
