@@ -1,5 +1,5 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: %i[ show edit update destroy ]
+  before_action :set_todo, only: [:show, :edit, :update, :destroy, :toggle_priority, :snooze]
 
   # GET /todos or /todos.json
   def index
@@ -79,6 +79,8 @@ class TodosController < ApplicationController
       format.html { redirect_to todos_path }
     end
   end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_todo
