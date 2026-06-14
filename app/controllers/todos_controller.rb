@@ -57,21 +57,14 @@ class TodosController < ApplicationController
     end
   end
 
-  def hello
-    respond_to do |format|
-      format.html { render :hello }
-      format.json { render json: "hello world!" }
-    end
-  end
-
-
-  def snooze
-    @todo.snooze!
-
+  def toggle_priority
+    @todo.toggle_priority!
+  
     respond_to do |format|
       format.turbo_stream do
+        # Using dom_id(@todo) guarantees it generates "todo_42" to match the frontend element exactly
         render turbo_stream: turbo_stream.replace(
-          "todo_#{@todo.id}",
+          view_context.dom_id(@todo),
           partial: "todos/todo",
           locals: { todo: @todo }
         )
@@ -79,6 +72,28 @@ class TodosController < ApplicationController
       format.html { redirect_to todos_path }
     end
   end
+  
+  def snooze
+    @todo.snooze!
+  
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          view_context.dom_id(@todo),
+          partial: "todos/todo",
+          locals: { todo: @todo }
+        )
+      end
+      format.html { redirect_to todos_path }
+    end
+  end
+  def hello
+    respond_to do |format|
+      format.html { render :hello }
+      format.json { render json: "hello world!" }
+    end
+  end
+
 
 
   private

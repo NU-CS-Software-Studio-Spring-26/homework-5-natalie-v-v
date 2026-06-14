@@ -1,7 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  description: MyString
+  description: "Standard Task Run"
+  high_priority: false
+  due_date: 2026-05-30 12:00:00 
 
 two:
-  description: MyString
+  description: "Deadlineless Task Run"
+  high_priority: false
+  due_date: ni
